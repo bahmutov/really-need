@@ -1,0 +1,34 @@
+{
+  "name": "really-need",
+  "version": "1.0.0",
+  "description": "Node require wrapper with arguments, like no caching",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/simple.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bahmutov/really-need.git"
+  },
+  "keywords": [
+    "node",
+    "npm",
+    "require",
+    "module",
+    "load",
+    "loader",
+    "commonjs",
+    "wrapper"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/really-need/issues"
+  },
+  "homepage": "https://github.com/bahmutov/really-need",
+  "dependencies": {
+    "check-more-types": "1.1.1",
+    "check-types": "1.4.0",
+    "lazy-ass": "0.5.3"
+  }
+}
