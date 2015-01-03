@@ -27,7 +27,17 @@ module.exports = function(grunt) {
       options: {
           config: 'jscs.json'
       }
+    },
+
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/*-spec.js']
+      }
     }
+
   });
 
   var plugins = require('matchdep').filterDev('grunt-*');
@@ -35,5 +45,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', ['jshint', 'eslint', 'jscs']);
   grunt.registerTask('pre-check', ['deps-ok', 'lint', 'nice-package']);
-  grunt.registerTask('default', ['pre-check']);
+  grunt.registerTask('default', ['pre-check', 'mochaTest']);
 };
