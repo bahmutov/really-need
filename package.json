@@ -4,7 +4,9 @@
   "description": "Node require wrapper with arguments, like no caching",
   "main": "index.js",
   "scripts": {
-    "test": "node test/simple.js"
+    "test": "npm run test-simple && npm run test-random",
+    "test-simple": "node test/simple.js",
+    "test-random": "node test/new-random-every-time.js"
   },
   "repository": {
     "type": "git",
