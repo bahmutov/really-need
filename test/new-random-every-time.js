@@ -16,7 +16,7 @@ console.log('got back require', require);
 // var a = require('./random');
 //console.log('a random number', a);
 
-var k1 = require('./random', { cache: false });
+var k1 = require('./random', { cache: false, debug: true });
 console.log('first random', k1);
 
 var k2 = require('./random');

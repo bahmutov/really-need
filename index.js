@@ -16,9 +16,17 @@ function shouldBustCache(options) {
     (!options.cache || !options.cached || options.bust || options.bustCache);
 }
 
+function noop() {}
+
+function logger(options) {
+  return check.object(options) &&
+    (options.debug || options.verbose) ? console.log : noop;
+}
+
 Module.prototype.require = function reallyNeedRequire(name, options) {
-  console.log('really-need', arguments);
-  console.log('called from file', this.filename);
+  var log = logger(options);
+  log('really-need', arguments);
+  log('called from file', this.filename);
 
   la(check.unemptyString(name), 'expected module name', arguments);
   la(check.unemptyString(this.filename), 'expected called from module to have filename', this);
@@ -26,15 +34,15 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
 
   if (check.object(options)) {
     if (shouldBustCache(options)) {
-      console.log('deleting before require', name);
+      log('deleting from cache before require', name);
       delete require.cache[nameToLoad];
     }
   }
 
-  console.log('calling _require', nameToLoad);
+  log('calling _require', nameToLoad);
 
   var result = _require.call(this, nameToLoad);
-  console.log('_require result', result);
+  log('_require result', result);
   return result;
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "really-need",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
   "main": "index.js",
   "scripts": {

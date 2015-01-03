@@ -8,6 +8,10 @@
 [![dependencies][really-need-dependencies-image] ][really-need-dependencies-url]
 [![devdependencies][really-need-devdependencies-image] ][really-need-devdependencies-url]
 
+First call to `require('really-need')` replaced `Module.prototype.require` with a better version.
+Other modules can use new `require` directly. The module making the call to `really-need` needs
+to use the returned value.
+
 ```js
 require = require('really-need');
 // global require is now a better one!
@@ -16,6 +20,23 @@ var foo = require('./foo', {
     cache: false
 });
 ```
+
+## API
+
+The `require` function provided by `really-need` takes a second argument: an options object. 
+
+### cache
+
+*false* - Delete previously loaded object for the given module id from internal cache before loading.
+Equivalent to loading and compiling the JavaScript again. Alias *cached*.
+
+### bust
+
+The opposite of `cache` - when `bust: true`, the previously cached is deleted. Alias *bustCache*.
+
+### verbose
+
+Print debug messages while loading. Alias *debug*.
 
 ## How it works
 
