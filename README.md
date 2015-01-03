@@ -55,7 +55,7 @@ module.exports = function() { return 'foo'; };
 require = require('really-need');
 require('./foo', { 
     pre: function (source, filename) {
-        return 'console.log("loading"' + filename + ');\n' + source;
+        return 'console.log("loading ' + filename + '");\n' + source;
     }
 });
 // loading /path/to/foo.js
