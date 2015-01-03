@@ -18,7 +18,9 @@ la(check.fn(_compile), 'cannot find module _compile');
 function shouldBustCache(options) {
   // allow aliases to bust cache
   return check.object(options) &&
-    (!options.cache || !options.cached || options.bust || options.bustCache);
+    ((check.has(options, 'cache') && !options.cache) ||
+      (check.has(options, 'cached') && !options.cached) ||
+      options.bust || options.bustCache);
 }
 
 function noop() {}
@@ -28,7 +30,24 @@ function logger(options) {
     (options.debug || options.verbose) ? console.log : noop;
 }
 
+function load(transform, module, filename) {
+  la(check.fn(transform), 'expected transform function');
+  la(check.object(module), 'expected module');
+  la(check.unemptyString(filename), 'expected filename', filename);
+
+  var fs = require('fs');
+  var source = fs.readFileSync(filename, 'utf8');
+  var ret = transform(source, filename);
+  if (typeof ret === 'string') {
+    module._compile(ret, filename);
+  } else {
+    console.error('transforming source from', filename, 'has not returned a string');
+    module._compile(source, filename);
+  }
+}
+
 Module.prototype.require = function reallyNeedRequire(name, options) {
+  options = options || {};
   var log = logger(options);
   log('really-need', arguments);
   log('called from file', this.filename);
@@ -37,17 +56,27 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
   la(check.unemptyString(this.filename), 'expected called from module to have filename', this);
   var nameToLoad = Module._resolveFilename(name, this);
 
-  if (check.object(options)) {
-    if (shouldBustCache(options)) {
-      log('deleting from cache before require', name);
-      delete require.cache[nameToLoad];
-    }
+  if (shouldBustCache(options)) {
+    log('deleting from cache before require', name);
+    delete require.cache[nameToLoad];
   }
 
   log('calling _require', nameToLoad);
 
+  var extension = '.js';
+  var prevPre = Module._extensions[extension];
+  if (check.fn(options.pre)) {
+    log('using pre- function' + (options.pre.name ? ' ' + options.pre.name : ''));
+    Module._extensions[extension] = load.bind(null, options.pre);
+  }
+
   var result = _require.call(this, nameToLoad);
   log('_require result', result);
+
+  if (check.fn(options.pre)) {
+    Module._extensions[extension] = prevPre;
+  }
+
   return result;
 };
 

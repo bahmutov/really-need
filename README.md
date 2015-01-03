@@ -17,7 +17,11 @@ require = require('really-need');
 // global require is now a better one!
 // evaluate foo.js again, busting the cache
 var foo = require('./foo', {
-    cache: false
+    cache: false,
+    pre: function (source, filename) {
+        // transform source before compiling it in any way
+        return source;
+    }
 });
 ```
 
@@ -34,6 +38,12 @@ Equivalent to loading and compiling the JavaScript again. Alias *cached*.
 
 The opposite of `cache` - when `bust: true`, the previously cached is deleted. Alias *bustCache*.
 
+### pre
+
+Gives you a chance to transform loaded source before compiling it. Can be used to instrument code,
+compile other languages into JavaScript, etc. See related project [node-hook][node-hook] and
+read [Hooking into Node loader for fun and profit][hooking].
+
 ### verbose
 
 Print debug messages while loading. Alias *debug*.
@@ -49,11 +59,6 @@ console.log(Module);
 // inspect one function for example
 console.log(Module._load.toString());
 ```
-
-## Related projects
-
-* [node-hook][node-hook] - simple source code transformation on load, 
-see [Hooking into Node loader for fun and profit].
 
 [module.js]: https://github.com/joyent/node/blob/master/lib/module.js
 [node-hook]: https://github.com/bahmutov/node-hook
