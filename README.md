@@ -1,6 +1,12 @@
 # really-need
 
-> A wrapper for Node require with options (like cache busting) and arguments
+> A wrapper for Node require with options for cache busting, pre- and post-processing.
+
+[![NPM][really-need-icon] ][really-need-url]
+
+[![Build status][really-need-ci-image] ][really-need-ci-url]
+[![dependencies][really-need-dependencies-image] ][really-need-dependencies-url]
+[![devdependencies][really-need-devdependencies-image] ][really-need-devdependencies-url]
 
 ## How it works
 
@@ -60,3 +66,12 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[really-need-icon]: https://nodei.co/npm/really-need.png?downloads=true
+[really-need-url]: https://npmjs.org/package/really-need
+[really-need-ci-image]: https://travis-ci.org/bahmutov/really-need.png?branch=master
+[really-need-ci-url]: https://travis-ci.org/bahmutov/really-need
+[really-need-dependencies-image]: https://david-dm.org/bahmutov/really-need.png
+[really-need-dependencies-url]: https://david-dm.org/bahmutov/really-need
+[really-need-devdependencies-image]: https://david-dm.org/bahmutov/really-need/dev-status.png
+[really-need-devdependencies-url]: https://david-dm.org/bahmutov/really-need#info=devDependencies

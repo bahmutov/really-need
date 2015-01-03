@@ -1,7 +1,7 @@
 {
   "name": "really-need",
-  "version": "1.0.0",
-  "description": "Node require wrapper with arguments, like no caching",
+  "version": "1.0.1",
+  "description": "Node require wrapper with options for cache busting, pre- and post-processing",
   "main": "index.js",
   "scripts": {
     "test": "npm run test-simple && npm run test-random",
