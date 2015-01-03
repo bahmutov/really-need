@@ -47,11 +47,14 @@
     "url": "https://github.com/bahmutov/really-need.git"
   },
   "scripts": {
-    "test": "grunt && npm run test-simple && npm run test-random && npm run test-nested && npm run test-pre && npm run test-post",
+    "test": "grunt && npm run basic-tests && npm run extra-tests",
+    "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested",
+    "extra-tests": "npm run test-pre && npm run test-post && npm run test-path",
     "test-simple": "node test/simple.js",
     "test-random": "node test/new-random-every-time.js",
     "test-nested": "node test/nested-a.js",
     "test-pre": "node test/pre-test.js",
-    "test-post": "node test/post-test.js"
+    "test-post": "node test/post-test.js",
+    "test-path": "node test/path-test.js"
   }
 }
