@@ -46,11 +46,11 @@ function load(transform, module, filename) {
   }
 }
 
-var tempOptions;
+// options by filename
+var tempOptions = {};
 
 Module.prototype.require = function reallyNeedRequire(name, options) {
   options = options || {};
-  tempOptions = options;
 
   var log = logger(options);
   log('really-need', arguments);
@@ -59,6 +59,7 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
   la(check.unemptyString(name), 'expected module name', arguments);
   la(check.unemptyString(this.filename), 'expected called from module to have filename', this);
   var nameToLoad = Module._resolveFilename(name, this);
+  tempOptions[nameToLoad] = options;
 
   if (shouldBustCache(options)) {
     log('deleting from cache before require', name);
@@ -94,17 +95,16 @@ var patchedCompile = eval('(' + _compileStr + ')');
 
 Module.prototype._compile = function (content, filename) {
   var result = patchedCompile.call(this, content, filename);
+  var options = tempOptions[filename];
+  if (options && check.fn(options.post)) {
+    var log = logger(options);
+    log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
 
-  if (tempOptions && check.fn(tempOptions.post)) {
-    var log = logger(tempOptions);
-    log('transforming result' + (tempOptions.post.name ? ' ' + tempOptions.post.name : ''));
-
-    var transformed = tempOptions.post(this.exports, filename);
+    var transformed = options.post(this.exports, filename);
     if (typeof transformed !== 'undefined') {
       log('transform function returned undefined, using original result');
       this.exports = transformed;
     }
-    tempOptions = null;
   }
   return result;
 };
