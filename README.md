@@ -19,7 +19,7 @@ require = require('really-need');
 var foo = require('./foo', {
     cache: false,
     pre: function (source, filename) {
-        // transform source before compiling it in any way
+        // transform the source before compiling it
         return source;
     },
     post: function (exported, filename) {
@@ -47,6 +47,19 @@ The opposite of `cache` - when `bust: true`, the previously cached is deleted. A
 Gives you a chance to transform loaded source before compiling it. Can be used to instrument code,
 compile other languages into JavaScript, etc. See related project [node-hook][node-hook] and
 read [Hooking into Node loader for fun and profit][hooking].
+
+```js
+// foo.js
+module.exports = function() { return 'foo'; };
+// index.js
+require = require('really-need');
+require('./foo', { 
+    pre: function (source, filename) {
+        return 'console.log("loading"' + filename + ');\n' + source;
+    }
+});
+// loading /path/to/foo.js
+```
 
 ### post
 
