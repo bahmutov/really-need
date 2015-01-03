@@ -36,6 +36,14 @@ module.exports = function(grunt) {
         },
         src: ['test/*-spec.js']
       }
+    },
+
+    readme: {
+      options: {
+        readme: './docs/README.tmpl.md',
+        docs: '.',
+        templates: './docs'
+      }
     }
 
   });
@@ -45,5 +53,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', ['jshint', 'eslint', 'jscs']);
   grunt.registerTask('pre-check', ['deps-ok', 'lint', 'nice-package']);
-  grunt.registerTask('default', ['pre-check', 'mochaTest']);
+  grunt.registerTask('default', ['pre-check', 'mochaTest', 'readme']);
 };

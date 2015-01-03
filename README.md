@@ -1,12 +1,22 @@
-# really-need
+# really-need v1.3.0
 
-> A wrapper for Node require with options for cache busting, pre- and post-processing.
+> Node require wrapper with options for cache busting, pre- and post-processing
 
 [![NPM][really-need-icon] ][really-need-url]
 
 [![Build status][really-need-ci-image] ][really-need-ci-url]
 [![dependencies][really-need-dependencies-image] ][really-need-dependencies-url]
 [![devdependencies][really-need-devdependencies-image] ][really-need-devdependencies-url]
+
+[really-need-icon]: https://nodei.co/npm/really-need.png?downloads=true
+[really-need-url]: https://npmjs.org/package/really-need
+[really-need-ci-image]: https://travis-ci.org/bahmutov/really-need.png?branch=master
+[really-need-ci-url]: https://travis-ci.org/bahmutov/really-need
+[really-need-dependencies-image]: https://david-dm.org/bahmutov/really-need.png
+[really-need-dependencies-url]: https://david-dm.org/bahmutov/really-need
+[really-need-devdependencies-image]: https://david-dm.org/bahmutov/really-need/dev-status.png
+[really-need-devdependencies-url]: https://david-dm.org/bahmutov/really-need#info=devDependencies
+
 
 First call to `require('really-need')` replaced `Module.prototype.require` with a better version.
 Other modules can use new `require` directly. The module making the call to `really-need` needs
@@ -29,20 +39,21 @@ var foo = require('./foo', {
 });
 ```
 
-## API
+
+### API
 
 The `require` function provided by `really-need` takes a second argument: an options object. 
 
-### cache
+#### cache
 
 *false* - Delete previously loaded object for the given module id from internal cache before loading.
 Equivalent to loading and compiling the JavaScript again. Alias *cached*.
 
-### bust
+#### bust
 
 The opposite of `cache` - when `bust: true`, the previously cached is deleted. Alias *bustCache*.
 
-### pre
+#### pre
 
 Gives you a chance to transform loaded source before compiling it. Can be used to instrument code,
 compile other languages into JavaScript, etc. See related project [node-hook][node-hook] and
@@ -61,7 +72,10 @@ require('./foo', {
 // loading /path/to/foo.js
 ```
 
-### post
+[node-hook]: https://github.com/bahmutov/node-hook
+[hooking]: http://bahmutov.calepin.co/hooking-into-node-loader-for-fun-and-profit.html
+
+#### post
 
 Function that transform the exported object. For example, you can replace exported function with
 another one on the fly.
@@ -79,11 +93,81 @@ var foo = require('./foo', {
 console.log(foo()); // "bar"
 ```
 
-### verbose
+#### verbose
 
 Print debug messages while loading. Alias *debug*.
 
-## How it works
+
+## Use
+
+### Instrument code on load
+
+One can instrument loaded JavaScript file to collect code coverage information. I am using [istanbul][istanbul].
+
+```js
+var istanbul = require('istanbul');
+var instrumenter = new istanbul.Instrumenter();
+var instrument = instrumenter.instrumentSync.bind(instrumenter);
+require = require('really-need');
+var foo = require('./foo', {
+  bust: true, // make sure to load foo.js again
+  pre: instrument // signatures for post and instrument match exactly
+});
+console.log(foo());
+console.log(foo());
+console.log(foo());
+// how many times did foo run?
+var fooFilename = require('path').resolve('./foo.js');
+console.log('function in foo.js ran', __coverage__[fooFilename].f[1], 'times');
+// or you can generate detailed reports
+```
+
+output
+
+    foo
+    foo
+    foo
+    function in foo.js ran 3 times
+
+[istanbul]: https://www.npmjs.com/package/istanbul
+
+### Mock user module during testing
+
+Require a user module during suite setup, then modify the module's exports in `post` function.
+Any module loaded afterwards that requires the mocked module will get the module too.
+
+```js
+// foo.js
+module.exports = function () { return 'foo'; }
+// foo-spec.js
+describe('mocking a module', function () {
+  require = require('really-need');
+  var foo;
+  beforeEach(function () {
+    foo = require('./foo', {
+      debug: true,
+      post: function (exported) {
+        // return anything you want.
+        return function mockFoo() {
+          return 'bar';
+        };
+      }
+    });
+  });
+  it('mocked foo returns "bar"', function () {
+    console.assert(foo() === 'bar', foo());
+  });
+  it.only('works even if some other module requires ./foo', function () {
+    require('./foo-returns-bar');
+  });
+});
+// foo-returns-bar.js
+var foo = require('./foo');
+console.assert(foo() === 'bar', 'OMG, ./foo.js was mocked!');
+```
+
+
+### How it works
 
 Everything related to loading CommonJS modules in Node is factored into a `module` class.
 Take a look at [module.js][module.js]. You can inspect most of the functions even from REPL
@@ -96,8 +180,7 @@ console.log(Module._load.toString());
 ```
 
 [module.js]: https://github.com/joyent/node/blob/master/lib/module.js
-[node-hook]: https://github.com/bahmutov/node-hook
-[hooking]: http://bahmutov.calepin.co/hooking-into-node-loader-for-fun-and-profit.html
+
 
 ### Small print
 
@@ -113,6 +196,8 @@ Spread the word: tweet, star on github, etc.
 
 Support: if you find any problems with this module, email / tweet /
 [open issue](https://github.com/bahmutov/really-need/issues) on Github
+
+
 
 ## MIT License
 
@@ -137,11 +222,5 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[really-need-icon]: https://nodei.co/npm/really-need.png?downloads=true
-[really-need-url]: https://npmjs.org/package/really-need
-[really-need-ci-image]: https://travis-ci.org/bahmutov/really-need.png?branch=master
-[really-need-ci-url]: https://travis-ci.org/bahmutov/really-need
-[really-need-dependencies-image]: https://david-dm.org/bahmutov/really-need.png
-[really-need-dependencies-url]: https://david-dm.org/bahmutov/really-need
-[really-need-devdependencies-image]: https://david-dm.org/bahmutov/really-need/dev-status.png
-[really-need-devdependencies-url]: https://david-dm.org/bahmutov/really-need#info=devDependencies
+
+
