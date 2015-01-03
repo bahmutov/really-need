@@ -1,9 +1,14 @@
+'use strict';
+
 require('lazy-ass');
 var check = require('check-more-types');
-var path = require('path');
 var Module = require('module');
+
+// these variables are needed inside eval _compile
+/* jshint -W098 */
 var runInNewContext = require('vm').runInNewContext;
 var runInThisContext = require('vm').runInThisContext;
+var path = require('path');
 
 var _require = Module.prototype.require;
 la(check.fn(_require), 'cannot find module require');
@@ -51,11 +56,11 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
 var _compileStr = _compile.toString();
 _compileStr = _compileStr.replace('self.require(path);', 'self.require.apply(self, arguments);');
 
+/* jshint -W061 */
 var patchedCompile = eval('(' + _compileStr + ')');
 
-Module.prototype._compile = function(content, filename) {
+Module.prototype._compile = function (content, filename) {
   return patchedCompile.call(this, content, filename);
 };
 
 module.exports = Module.prototype.require.bind(module.parent);
-
