@@ -2,18 +2,13 @@ require('lazy-ass');
 var check = require('check-more-types');
 var path = require('path');
 var Module = require('module');
-// console.log(Module);
-
-// console.log(Module._load.toString());
-
-// console.log('Module.load');
-// console.log(new Module('./test/foo', this).load.toString());
-
-// console.log('require');
-// console.log(Module.prototype.require)
+var runInNewContext = require('vm').runInNewContext;
+var runInThisContext = require('vm').runInThisContext;
 
 var _require = Module.prototype.require;
-la(check.fn(_require), 'cannot find global require');
+la(check.fn(_require), 'cannot find module require');
+var _compile = Module.prototype._compile;
+la(check.fn(_compile), 'cannot find module _compile');
 
 function shouldBustCache(options) {
   // allow aliases to bust cache
@@ -22,7 +17,7 @@ function shouldBustCache(options) {
 }
 
 Module.prototype.require = function reallyNeedRequire(name, options) {
-  console.log('require', arguments);
+  console.log('really-need', arguments);
   console.log('called from file', this.filename);
 
   la(check.unemptyString(name), 'expected module name', arguments);
@@ -30,7 +25,6 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
   var nameToLoad = Module._resolveFilename(name, this);
 
   if (check.object(options)) {
-
     if (shouldBustCache(options)) {
       console.log('deleting before require', name);
       delete require.cache[nameToLoad];
@@ -38,9 +32,22 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
   }
 
   console.log('calling _require', nameToLoad);
+
   var result = _require.call(this, nameToLoad);
   console.log('_require result', result);
   return result;
 };
 
+// see Module.prototype._compile in
+// https://github.com/joyent/node/blob/master/lib/module.js
+var _compileStr = _compile.toString();
+_compileStr = _compileStr.replace('self.require(path);', 'self.require.apply(self, arguments);');
+
+var patchedCompile = eval('(' + _compileStr + ')');
+
+Module.prototype._compile = function(content, filename) {
+  return patchedCompile.call(this, content, filename);
+};
+
 module.exports = Module.prototype.require.bind(module.parent);
+
