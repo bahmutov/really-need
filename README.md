@@ -8,6 +8,15 @@
 [![dependencies][really-need-dependencies-image] ][really-need-dependencies-url]
 [![devdependencies][really-need-devdependencies-image] ][really-need-devdependencies-url]
 
+```js
+require = require('really-need');
+// global require is now a better one!
+// evaluate foo.js again, busting the cache
+var foo = require('./foo', {
+    cache: false
+});
+```
+
 ## How it works
 
 Everything related to loading CommonJS modules in Node is factored into a `module` class.
