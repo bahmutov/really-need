@@ -46,8 +46,12 @@ function load(transform, module, filename) {
   }
 }
 
+var tempOptions;
+
 Module.prototype.require = function reallyNeedRequire(name, options) {
   options = options || {};
+  tempOptions = options;
+
   var log = logger(options);
   log('really-need', arguments);
   log('called from file', this.filename);
@@ -89,7 +93,20 @@ _compileStr = _compileStr.replace('self.require(path);', 'self.require.apply(sel
 var patchedCompile = eval('(' + _compileStr + ')');
 
 Module.prototype._compile = function (content, filename) {
-  return patchedCompile.call(this, content, filename);
+  var result = patchedCompile.call(this, content, filename);
+
+  if (tempOptions && check.fn(tempOptions.post)) {
+    var log = logger(tempOptions);
+    log('transforming result' + (tempOptions.post.name ? ' ' + tempOptions.post.name : ''));
+
+    var transformed = tempOptions.post(this.exports, filename);
+    if (typeof transformed !== 'undefined') {
+      log('transform function returned undefined, using original result');
+      this.exports = transformed;
+    }
+    tempOptions = null;
+  }
+  return result;
 };
 
 module.exports = Module.prototype.require.bind(module.parent);

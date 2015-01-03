@@ -1,7 +1,7 @@
 {
   "name": "really-need",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/really-need/issues"
@@ -47,10 +47,11 @@
     "url": "https://github.com/bahmutov/really-need.git"
   },
   "scripts": {
-    "test": "grunt && npm run test-simple && npm run test-random && npm run test-nested && npm run test-pre",
+    "test": "grunt && npm run test-simple && npm run test-random && npm run test-nested && npm run test-pre && npm run test-post",
     "test-simple": "node test/simple.js",
     "test-random": "node test/new-random-every-time.js",
     "test-nested": "node test/nested-a.js",
-    "test-pre": "node test/pre-test.js"
+    "test-pre": "node test/pre-test.js",
+    "test-post": "node test/post-test.js"
   }
 }
