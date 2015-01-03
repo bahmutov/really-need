@@ -7,7 +7,7 @@ describe('mocking a module', function () {
       debug: true,
       post: function (exported) {
         console.log('changing foo exports');
-        return function bar() {
+        return function mockFoo() {
           return 'bar';
         };
       }
@@ -20,5 +20,9 @@ describe('mocking a module', function () {
 
   it('mocked foo returns "bar"', function () {
     console.assert(foo() === 'bar', foo());
+  });
+
+  it.only('works even if some other module requires ./foo', function () {
+    require('./foo-returns-bar');
   });
 });
