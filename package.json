@@ -44,7 +44,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "pre-commit": "npm test",
+  "pre-commit": "npm test && npm version",
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/really-need.git"
