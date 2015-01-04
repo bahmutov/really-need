@@ -18,6 +18,12 @@ var foo = require('./foo', {
     post: function (exported, filename) {
         // transform the exported object / value from the file
         return exported;
+    },
+    // inject additional values into foo.js
+    args: {
+        a: 10,
+        b: 5,
+        __dirname: '/some/path'
     }
 });
 ```
