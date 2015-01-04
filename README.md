@@ -107,7 +107,8 @@ Print debug messages while loading. Alias *debug*, default `false`.
 
 ### Instrument code on load
 
-One can instrument loaded JavaScript file to collect code coverage information. I am using [istanbul][istanbul].
+One can instrument the loaded JavaScript file to collect the code coverage information. 
+I am using the excellent [istanbul][istanbul] library in the example below.
 
 ```js
 var istanbul = require('istanbul');
@@ -138,8 +139,8 @@ output
 
 ### Mock user module during testing
 
-Require a user module during suite setup, then modify the module's exports in `post` function.
-Any module loaded afterwards that requires the mocked module will get the module too.
+Require a user module during the suite setup, then modify the module's exports in the `post` function.
+Any module loaded afterwards that requires the mocked module will get the mock value.
 
 ```js
 // foo.js
