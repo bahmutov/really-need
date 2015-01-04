@@ -60,8 +60,8 @@ it again. Alias *cached*, default `false`.
 
 #### pre
 
-Gives you a chance to transform loaded source before compiling it. Can be used to instrument code,
-compile other languages into JavaScript, etc. See related project [node-hook][node-hook] and
+Gives you a chance to transform the loaded source before compiling it. Can be used to instrument the loaded code,
+compile other languages into JavaScript, etc. See the related project [node-hook][node-hook] and
 read [Hooking into Node loader for fun and profit][hooking].
 
 ```js
@@ -82,7 +82,7 @@ require('./foo', {
 
 #### post
 
-Function that transform the exported object. For example, you can replace exported function with
+Function to transform the module's exported value. For example, you can replace the exported function with
 another one on the fly.
 
 ```js
