@@ -1,4 +1,4 @@
-# really-need v1.5.0
+# really-need v1.5.1
 
 > Node require wrapper with options for cache busting, pre- and post-processing
 
@@ -104,6 +104,34 @@ Print debug messages while loading. Alias *debug*, default `false`.
 
 
 ## Use
+
+### Load a different module
+
+I love [defensive programming][paranoid] and write a lot of assertions when programming.
+My favorite predicate and type checking library is [check-types][check-types]. It was missing
+a few checks we needed, so we wrote and open sourced a library [check-more-types][check-more-types].
+Typically, one needs to require `check-more-type` in any place where `check-types` is used to get
+our library. This means a lot of code editions to make. 
+
+We can use `really-need` to load `check-more-types` instead of `check-types`. Just include
+this code in the beginning of the application to place `check-more-types` in the cache.
+
+```js
+require = require('really-need');
+require('check-types', {
+  post: function () {
+    return require('check-more-types');
+  }
+});
+// any code later will get check-more-type
+var check = require('check-types');
+console.log('check.bit(1) =', check.bit(1));
+// check.bit(1) = true
+```
+
+[paranoid]: http://bahmutov.calepin.co/paranoid-coding.html
+[check-types]: https://github.com/philbooth/check-types.js
+[check-more-types]: https://github.com/kensho/check-more-types
 
 ### Instrument code on load
 
