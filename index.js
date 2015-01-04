@@ -25,8 +25,8 @@ function shouldBustCache(options) {
 function shouldFreeWhenDone(options) {
   la(check.object(options), 'missing options object', options);
 
-  return ((check.has(options, 'cache') && !options.cache) ||
-    (check.has(options, 'cached') && !options.cached));
+  return ((check.has(options, 'keep') && !options.keep) ||
+    (check.has(options, 'cache') && !options.cache));
 }
 
 function noop() {}

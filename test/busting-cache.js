@@ -12,7 +12,7 @@ console.assert(foo3() === 'foo', 'foo should return "foo"');
 console.assert(foo !== foo3, 'returned different instance');
 
 var foo4 = require('./foo', {
-  cache: false,
+  keep: false,
   debug: true
 });
 console.assert(foo3 === foo4, 'same foo returned again');

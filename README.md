@@ -1,4 +1,4 @@
-# really-need v1.4.0
+# really-need v1.5.0
 
 > Node require wrapper with options for cache busting, pre- and post-processing
 
@@ -30,7 +30,7 @@ var foo = require('./foo', {
     // remove previously loaded foo module
     bustCache: true,
     // remove from cache AFTER loading
-    cache: false,
+    keep: false,
     pre: function (source, filename) {
         // transform the source before compiling it
         return source;
@@ -53,10 +53,10 @@ Removes the previously cached module before loading.
 Equivalent to loading and compiling the JavaScript again.
 Alias *bustCache*, default `false`.
 
-#### cache
+#### keep
 
 Deletes loaded instance from the cache after loading to make sure the next `require` call loads
-it again. Alias *cached*, default `false`.
+it again. Alias *cache*, default `false`.
 
 #### pre
 

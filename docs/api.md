@@ -8,10 +8,10 @@ Removes the previously cached module before loading.
 Equivalent to loading and compiling the JavaScript again.
 Alias *bustCache*, default `false`.
 
-### cache
+### keep
 
 Deletes loaded instance from the cache after loading to make sure the next `require` call loads
-it again. Alias *cached*, default `false`.
+it again. Alias *cache*, default `false`.
 
 ### pre
 

@@ -10,7 +10,7 @@ var foo = require('./foo', {
     // remove previously loaded foo module
     bustCache: true,
     // remove from cache AFTER loading
-    cache: false,
+    keep: false,
     pre: function (source, filename) {
         // transform the source before compiling it
         return source;
