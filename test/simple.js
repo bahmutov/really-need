@@ -21,14 +21,3 @@ console.assert(typeof foo2 === 'function', 'expected foo function');
 console.assert(foo2() === 'foo', 'foo should return "foo"');
 
 console.assert(foo === foo2, 'require returned cached result');
-
-// new require takes 2 arguments: id and options
-console.assert(require.length === 2);
-
-// get NEW instance from ./foo.js
-console.log('Get NEW instance from ./foo.js');
-var foo3 = require('./foo', { cached: false });
-console.assert(typeof foo3 === 'function', 'expected foo function');
-console.assert(foo3() === 'foo', 'foo should return "foo"');
-
-console.assert(foo !== foo3, 'returned different instance');

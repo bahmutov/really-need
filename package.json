@@ -50,8 +50,9 @@
     "url": "https://github.com/bahmutov/really-need.git"
   },
   "scripts": {
-    "test": "grunt && npm run basic-tests && npm run extra-tests",
+    "test": "grunt && npm run basic-tests && npm run cache-tests && npm run extra-tests",
     "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested",
+    "cache-tests": "node test/busting-cache.js",
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path",
     "test-simple": "node test/simple.js",
     "test-random": "node test/new-random-every-time.js",
