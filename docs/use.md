@@ -94,3 +94,71 @@ describe('mocking a module', function () {
 var foo = require('./foo');
 console.assert(foo() === 'bar', 'OMG, ./foo.js was mocked!');
 ```
+
+## Inject values into the script on load
+
+After the source for the module has been loaded and transformed using `pre` function, the `Module` compiles
+it into the exported value. You can inject extra variables using `args` property. For example, we
+can pass values to be added
+
+```js
+// sum.js
+module.exports = a + b;
+// index.js
+require = require('really-need');
+var sum = require('./sum', {
+  args: {
+    a: 10,
+    b: 2
+  }
+});
+console.log(sum);
+// output 12
+```
+
+Notice that variables `a` and `b` are not declared in `sum.js`. Usually this means a `ReferenceError`, but
+we are injecting values at load time. We could have done similar thing using `pre` callback, but using `args`
+is simpler and does not replace any existing source transformations.
+
+You can even mess with built-in variables. When `Module` compiles the source, it wraps the loaded source
+into a function call. Print the `module` object from Node REPL to see before / after text
+
+```js
+require('module');
+wrapper: 
+ [ '(function (exports, require, module, __filename, __dirname) { ',
+   '\n});' ],
+```
+Because we are appending `args` directly to the loaded source, they take precedence. Thus we can do things like
+overwriting `__filename`.
+
+```js
+// filename.js
+console.log('filename', __filename);
+// index.js
+require = require('really-need');
+require('./filename', {
+  args: {
+    __filename: 'hi there'
+  }
+});
+// prints filename hi there
+```
+
+We can even disable all calls to `require` from the given script
+
+```js
+// another-require.js
+require('something');
+// index.js
+require = require('really-need');
+require('./another-require', {
+  args: {
+    require: function (name) {
+      console.log('no requires allowed');
+    }
+  }
+});
+// prints "no requires allowed"
+```
+

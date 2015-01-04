@@ -53,6 +53,23 @@ var foo = require('./foo', {
 console.log(foo()); // "bar"
 ```
 
+### args
+
+You can inject variables into the loaded module source. These variables will be declared at the top
+of the module.
+
+```js
+require('./foo', {
+    args: {
+        a: 10,
+        b: 20
+    }
+});
+// foo.js will have var a = 10, b = 20; at the top.
+```
+
+Each value will stringified to JSON, functions will be copied as a string.
+
 ### verbose
 
 Print debug messages while loading. Alias *debug*, default `false`.

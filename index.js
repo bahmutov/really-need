@@ -36,6 +36,16 @@ function logger(options) {
     (options.debug || options.verbose) ? console.log : noop;
 }
 
+function argsToDeclaration(args) {
+  la(check.object(args), 'expected args object', args);
+  var names = Object.keys(args);
+  return names.map(function (name) {
+    var val = args[name];
+    var value = check.fn(val) ? val.toString() : JSON.stringify(val);
+    return 'var ' + name + ' = ' + value + ';';
+  }).join('\n') + '\n';
+}
+
 function load(transform, module, filename) {
   la(check.fn(transform), 'expected transform function');
   la(check.object(module), 'expected module');
@@ -43,9 +53,9 @@ function load(transform, module, filename) {
 
   var fs = require('fs');
   var source = fs.readFileSync(filename, 'utf8');
-  var ret = transform(source, filename);
-  if (typeof ret === 'string') {
-    module._compile(ret, filename);
+  var transformed = transform(source, filename);
+  if (check.string(transformed)) {
+    module._compile(transformed, filename);
   } else {
     console.error('transforming source from', filename, 'has not returned a string');
     module._compile(source, filename);
@@ -105,25 +115,30 @@ _compileStr = _compileStr.replace('self.require(path);', 'self.require.apply(sel
 var patchedCompile = eval('(' + _compileStr + ')');
 
 Module.prototype._compile = function (content, filename) {
+  var options = tempOptions[filename] || {};
+  var log = logger(options);
+
+  if (check.has(options, 'args') && check.object(options.args)) {
+    log('injecting arguments', Object.keys(options.args).join(','), 'into', filename);
+    var added = argsToDeclaration(options.args);
+    content = added + content;
+  }
+
   var result = patchedCompile.call(this, content, filename);
-  var options = tempOptions[filename];
-  if (options) {
-    var log = logger(options);
 
-    if (check.fn(options.post)) {
-      log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
+  if (check.fn(options.post)) {
+    log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
 
-      var transformed = options.post(this.exports, filename);
-      if (typeof transformed !== 'undefined') {
-        log('transform function returned undefined, using original result');
-        this.exports = transformed;
-      }
+    var transformed = options.post(this.exports, filename);
+    if (typeof transformed !== 'undefined') {
+      log('transform function returned undefined, using original result');
+      this.exports = transformed;
     }
+  }
 
-    if (shouldFreeWhenDone(options)) {
-      log('deleting from cache after loading', filename);
-      delete require.cache[filename];
-    }
+  if (shouldFreeWhenDone(options)) {
+    log('deleting from cache after loading', filename);
+    delete require.cache[filename];
   }
   return result;
 };
