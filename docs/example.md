@@ -7,6 +7,9 @@ require = require('really-need');
 // global require is now a better one!
 // evaluate foo.js again, busting the cache
 var foo = require('./foo', {
+    // remove previously loaded foo module
+    bustCache: true,
+    // remove from cache AFTER loading
     cache: false,
     pre: function (source, filename) {
         // transform the source before compiling it

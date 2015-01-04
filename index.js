@@ -16,11 +16,17 @@ var _compile = Module.prototype._compile;
 la(check.fn(_compile), 'cannot find module _compile');
 
 function shouldBustCache(options) {
+  la(check.object(options), 'missing options object', options);
+
   // allow aliases to bust cache
-  return check.object(options) &&
-    ((check.has(options, 'cache') && !options.cache) ||
-      (check.has(options, 'cached') && !options.cached) ||
-      options.bust || options.bustCache);
+  return options.bust || options.bustCache;
+}
+
+function shouldFreeWhenDone(options) {
+  la(check.object(options), 'missing options object', options);
+
+  return ((check.has(options, 'cache') && !options.cache) ||
+    (check.has(options, 'cached') && !options.cached));
 }
 
 function noop() {}
@@ -82,6 +88,11 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
     Module._extensions[extension] = prevPre;
   }
 
+  if (shouldFreeWhenDone(options)) {
+    log('deleting from cache after loading', name);
+    delete require.cache[nameToLoad];
+  }
+
   return result;
 };
 
@@ -96,14 +107,22 @@ var patchedCompile = eval('(' + _compileStr + ')');
 Module.prototype._compile = function (content, filename) {
   var result = patchedCompile.call(this, content, filename);
   var options = tempOptions[filename];
-  if (options && check.fn(options.post)) {
+  if (options) {
     var log = logger(options);
-    log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
 
-    var transformed = options.post(this.exports, filename);
-    if (typeof transformed !== 'undefined') {
-      log('transform function returned undefined, using original result');
-      this.exports = transformed;
+    if (check.fn(options.post)) {
+      log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
+
+      var transformed = options.post(this.exports, filename);
+      if (typeof transformed !== 'undefined') {
+        log('transform function returned undefined, using original result');
+        this.exports = transformed;
+      }
+    }
+
+    if (shouldFreeWhenDone(options)) {
+      log('deleting from cache after loading', filename);
+      delete require.cache[filename];
     }
   }
   return result;

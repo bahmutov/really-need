@@ -1,4 +1,4 @@
-# really-need v1.3.0
+# really-need v1.4.0
 
 > Node require wrapper with options for cache busting, pre- and post-processing
 
@@ -27,6 +27,9 @@ require = require('really-need');
 // global require is now a better one!
 // evaluate foo.js again, busting the cache
 var foo = require('./foo', {
+    // remove previously loaded foo module
+    bustCache: true,
+    // remove from cache AFTER loading
     cache: false,
     pre: function (source, filename) {
         // transform the source before compiling it
@@ -44,14 +47,16 @@ var foo = require('./foo', {
 
 The `require` function provided by `really-need` takes a second argument: an options object. 
 
-#### cache
-
-*false* - Delete previously loaded object for the given module id from internal cache before loading.
-Equivalent to loading and compiling the JavaScript again. Alias *cached*.
-
 #### bust
 
-The opposite of `cache` - when `bust: true`, the previously cached is deleted. Alias *bustCache*.
+Removes the previously cached module before loading. 
+Equivalent to loading and compiling the JavaScript again.
+Alias *bustCache*, default `false`.
+
+#### cache
+
+Deletes loaded instance from the cache after loading to make sure the next `require` call loads
+it again. Alias *cached*, default `false`.
 
 #### pre
 
@@ -95,7 +100,7 @@ console.log(foo()); // "bar"
 
 #### verbose
 
-Print debug messages while loading. Alias *debug*.
+Print debug messages while loading. Alias *debug*, default `false`.
 
 
 ## Use
