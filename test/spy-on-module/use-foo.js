@@ -1,2 +1,4 @@
-var fn = require('./foo');
-console.log('fn returned', fn());
+var foo = require('./foo');
+console.log('foo returned', foo());
+
+var bar = require('./bar');

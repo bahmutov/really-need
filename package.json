@@ -26,6 +26,7 @@
     "matchdep": "0.3.0",
     "mocha": "2.1.0",
     "pre-git": "0.1.1",
+    "quote": "0.3.0",
     "time-grunt": "1.0.0"
   },
   "engines": {
@@ -44,7 +45,11 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "pre-commit": "npm test && npm version",
+  "pre-commit": [
+    "npm test",
+    "npm run test-spy",
+    "npm version"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bahmutov/really-need.git"
@@ -60,6 +65,7 @@
     "test-pre": "node test/pre-test.js",
     "test-post": "node test/post-test.js",
     "test-path": "node test/path-test.js",
-    "test-args": "node test/load-arguments.js"
+    "test-args": "node test/load-arguments.js",
+    "test-spy": "node test/spy-on-module/spy-on-foo.js"
   }
 }
