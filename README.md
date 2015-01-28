@@ -292,8 +292,8 @@ require('./another-require', {
 
 ### Determine if a module was really used
 
-Read blog post [Was NodeJS module used](http://bahmutov.calepin.co/was-nodejs-module-used.html) 
-and see project [was-it-used](https://github.com/bahmutov/was-it-used).
+Read the blog post [Was NodeJS module used](http://bahmutov.calepin.co/was-nodejs-module-used.html) 
+and see the project [was-it-used](https://github.com/bahmutov/was-it-used).
 
 
 ### How it works
