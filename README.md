@@ -84,7 +84,7 @@ require('./foo', {
 ```
 
 [node-hook]: https://github.com/bahmutov/node-hook
-[hooking]: http://bahmutov.calepin.co/hooking-into-node-loader-for-fun-and-profit.html
+[hooking]: http://glebbahmutov.com/blog/hooking-into-node-loader-for-fun-and-profit/
 
 #### post
 
@@ -152,7 +152,7 @@ console.log('check.bit(1) =', check.bit(1));
 // check.bit(1) = true
 ```
 
-[paranoid]: http://bahmutov.calepin.co/paranoid-coding.html
+[paranoid]: http://glebbahmutov.com/blog/paranoid-coding/
 [check-types]: https://github.com/philbooth/check-types.js
 [check-more-types]: https://github.com/kensho/check-more-types
 
@@ -292,13 +292,13 @@ require('./another-require', {
 
 ### Determine if a module was really used
 
-Read the blog post [Was NodeJS module used](http://bahmutov.calepin.co/was-nodejs-module-used.html) 
+Read the blog post [Was NodeJS module used](http://glebbahmutov.com/blog/was-nodejs-module-used/) 
 and see the project [was-it-used](https://github.com/bahmutov/was-it-used).
 
 
 ### How it works
 
-Read [Hacking Node require](http://bahmutov.calepin.co/hacking-node-require.html)
+Read [Hacking Node require](http://glebbahmutov.com/blog/hacking-node-require/)
 
 
 ### Small print
@@ -307,7 +307,7 @@ Author: Gleb Bahmutov &copy; 2014
 
 * [@bahmutov](https://twitter.com/bahmutov)
 * [glebbahmutov.com](http://glebbahmutov.com)
-* [blog](http://bahmutov.calepin.co/)
+* [blog](http://glebbahmutov.com/blog)
 
 License: MIT - do anything with the code, but don't blame me if it does not work.
 

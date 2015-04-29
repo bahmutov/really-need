@@ -33,7 +33,7 @@ require('./foo', {
 ```
 
 [node-hook]: https://github.com/bahmutov/node-hook
-[hooking]: http://bahmutov.calepin.co/hooking-into-node-loader-for-fun-and-profit.html
+[hooking]: http://glebbahmutov.com/blog/hooking-into-node-loader-for-fun-and-profit/
 
 ### post
 

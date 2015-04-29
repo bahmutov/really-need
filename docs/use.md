@@ -24,7 +24,7 @@ console.log('check.bit(1) =', check.bit(1));
 // check.bit(1) = true
 ```
 
-[paranoid]: http://bahmutov.calepin.co/paranoid-coding.html
+[paranoid]: http://glebbahmutov.com/blog/paranoid-coding/
 [check-types]: https://github.com/philbooth/check-types.js
 [check-more-types]: https://github.com/kensho/check-more-types
 
@@ -164,5 +164,5 @@ require('./another-require', {
 
 ## Determine if a module was really used
 
-Read the blog post [Was NodeJS module used](http://bahmutov.calepin.co/was-nodejs-module-used.html) 
+Read the blog post [Was NodeJS module used](http://glebbahmutov.com/blog/was-nodejs-module-used/) 
 and see the project [was-it-used](https://github.com/bahmutov/was-it-used).
