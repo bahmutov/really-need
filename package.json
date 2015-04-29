@@ -1,33 +1,33 @@
 {
   "name": "really-need",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/really-need/issues"
   },
   "contributors": [],
   "dependencies": {
-    "check-more-types": "1.1.1",
+    "check-more-types": "1.5.0",
     "check-types": "1.4.0",
-    "lazy-ass": "0.5.3"
+    "lazy-ass": "0.5.4"
   },
   "devDependencies": {
-    "eslint-rules": "0.3.0",
+    "eslint-rules": "0.4.3",
     "grunt": "0.4.5",
-    "grunt-contrib-jshint": "0.11.0",
-    "grunt-deps-ok": "0.5.2",
-    "grunt-eslint": "5.1.0",
-    "grunt-jscs": "1.2.0",
+    "grunt-contrib-jshint": "0.11.2",
+    "grunt-deps-ok": "0.7.1",
+    "grunt-eslint": "12.0.0",
+    "grunt-jscs": "1.8.0",
     "grunt-mocha-test": "0.12.7",
     "grunt-nice-package": "0.9.2",
     "grunt-readme": "0.4.5",
     "jshint-summary": "0.4.0",
     "matchdep": "0.3.0",
-    "mocha": "2.1.0",
-    "pre-git": "0.1.1",
-    "quote": "0.3.0",
-    "time-grunt": "1.0.0"
+    "mocha": "2.2.4",
+    "pre-git": "0.2.1",
+    "quote": "0.4.0",
+    "time-grunt": "1.1.1"
   },
   "engines": {
     "node": "> 0.10.*"
