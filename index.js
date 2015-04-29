@@ -143,4 +143,6 @@ Module.prototype._compile = function (content, filename) {
   return result;
 };
 
-module.exports = Module.prototype.require.bind(module.parent);
+var need = Module.prototype.require.bind(module.parent);
+need.cache = require.cache;
+module.exports = need;

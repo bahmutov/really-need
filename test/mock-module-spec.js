@@ -22,7 +22,7 @@ describe('mocking a module', function () {
     console.assert(foo() === 'bar', foo());
   });
 
-  it.only('works even if some other module requires ./foo', function () {
+  it('works even if some other module requires ./foo', function () {
     require('./foo-returns-bar');
   });
 });

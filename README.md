@@ -1,4 +1,4 @@
-# really-need v1.6.1
+# really-need v1.6.2
 
 > Node require wrapper with options for cache busting, pre- and post-processing
 
