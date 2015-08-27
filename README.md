@@ -295,6 +295,36 @@ require('./another-require', {
 Read the blog post [Was NodeJS module used](http://glebbahmutov.com/blog/was-nodejs-module-used/) 
 and see the project [was-it-used](https://github.com/bahmutov/was-it-used).
 
+### Unit test private variables / functions
+
+You can quickly load / access most private functions and variables, see 
+[describe-it](https://github.com/bahmutov/describe-it) project for details
+
+```js
+// get-foo.js
+(function reallyPrivate() {
+  function getFoo() {
+    return 'foo';
+  }
+}());
+```
+
+Notice that `getFoo` is not exported from the file, thus only can be tested indirectly. Or is it?
+
+```js
+// get-foo-spec.js
+var describeIt = require('describe-it');
+describeIt(__dirname + '/foo.js', 'getFoo()', function (getFn) {
+  it('returns "foo"', function () {
+    var getFoo = getFn();
+    console.assert(getFoo() === 'foo');
+  });
+});
+```
+
+Custom loader with source modification makes it simple to gain access to any desired
+function declaration, functional expression and even most variables. 
+
 
 ### How it works
 
