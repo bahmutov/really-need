@@ -62,6 +62,8 @@ function load(transform, module, filename) {
   }
 }
 
+// options for the patching
+var patchOptions = {};
 // options by filename
 var tempOptions = {};
 
@@ -110,6 +112,22 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
 // https://github.com/joyent/node/blob/master/lib/module.js
 var _compileStr = _compile.toString();
 _compileStr = _compileStr.replace('self.require(path);', 'self.require.apply(self, arguments);');
+
+if (patchOptions.printWrappedCode) {
+  (function printCompileResult() {
+    var wrapper = 'var wrapper = Module.wrap(content);\n';
+    var printWrapped = 'console.log(wrapper);';
+    var wrapperIndex = _compileStr.indexOf(wrapper);
+    if (wrapperIndex) {
+      wrapperIndex += wrapper.length;
+      _compileStr = _compileStr.substr(0, wrapperIndex) +
+        printWrapped +
+        _compileStr.substr(wrapperIndex);
+    }
+    // console.log('compiled and print wrapped');
+    // console.log(_compileStr)
+  }());
+}
 
 /* jshint -W061 */
 var patchedCompile = eval('(' + _compileStr + ')');
