@@ -77,12 +77,12 @@
     "test": "npm run build && npm run basic-tests && npm run cache-tests && npm run extra-tests",
     "test-args": "node test/load-arguments.js",
     "test-nested": "node test/nested-a.js",
+    "test-no-parent": "node test/no-parent/second.js && node test/no-parent/first.js",
     "test-path": "node test/path-test.js",
     "test-post": "node test/post-test.js",
     "test-pre": "node test/pre-test.js",
     "test-random": "node test/new-random-every-time.js",
     "test-simple": "node test/simple.js",
-    "test-spy": "node test/spy-on-module/spy-on-foo.js",
-    "test-no-parent": "node test/no-parent/second.js && node test/no-parent/first.js"
+    "test-spy": "node test/spy-on-module/spy-on-foo.js"
   }
 }
