@@ -15,6 +15,13 @@ la(check.fn(_require), 'cannot find module require');
 var _compile = Module.prototype._compile;
 la(check.fn(_compile), 'cannot find module _compile');
 
+// options for the patching
+var patchOptions = {
+  printWrappedCode: false
+};
+// options by filename
+var tempOptions = {};
+
 function shouldBustCache(options) {
   la(check.object(options), 'missing options object', options);
 
@@ -51,8 +58,13 @@ function load(transform, module, filename) {
   la(check.object(module), 'expected module');
   la(check.unemptyString(filename), 'expected filename', filename);
 
+  var options = tempOptions[filename] || {};
+
   var fs = require('fs');
   var source = fs.readFileSync(filename, 'utf8');
+  if (options.hasOwnProperty('parent')) {
+    module.parent = options.parent;
+  }
   var transformed = transform(source, filename);
   if (check.string(transformed)) {
     module._compile(transformed, filename);
@@ -61,11 +73,6 @@ function load(transform, module, filename) {
     module._compile(source, filename);
   }
 }
-
-// options for the patching
-var patchOptions = {};
-// options by filename
-var tempOptions = {};
 
 Module.prototype.require = function reallyNeedRequire(name, options) {
   options = options || {};
@@ -124,11 +131,13 @@ if (patchOptions.printWrappedCode) {
         printWrapped +
         _compileStr.substr(wrapperIndex);
     }
-    // console.log('compiled and print wrapped');
-    // console.log(_compileStr)
+    console.log('compiled and print wrapped');
+    console.log(_compileStr);
   }());
 }
 
+// console.log('patched compile code');
+// console.log(_compileStr);
 /* jshint -W061 */
 var patchedCompile = eval('(' + _compileStr + ')');
 
