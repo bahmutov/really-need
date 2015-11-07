@@ -82,6 +82,7 @@
     "test-pre": "node test/pre-test.js",
     "test-random": "node test/new-random-every-time.js",
     "test-simple": "node test/simple.js",
-    "test-spy": "node test/spy-on-module/spy-on-foo.js"
+    "test-spy": "node test/spy-on-module/spy-on-foo.js",
+    "test-no-parent": "node test/no-parent/second.js && node test/no-parent/first.js"
   }
 }
