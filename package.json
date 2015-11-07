@@ -69,7 +69,7 @@
     "url": "https://github.com/bahmutov/really-need.git"
   },
   "scripts": {
-    "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested",
+    "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested && npm run test-no-parent",
     "build": "grunt",
     "cache-tests": "node test/busting-cache.js",
     "commit": "git-cz",
