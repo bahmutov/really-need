@@ -62,9 +62,6 @@ function load(transform, module, filename) {
 
   var fs = require('fs');
   var source = fs.readFileSync(filename, 'utf8');
-  if (options.hasOwnProperty('parent')) {
-    module.parent = options.parent;
-  }
   var transformed = transform(source, filename);
   if (check.string(transformed)) {
     module._compile(transformed, filename);
@@ -100,7 +97,12 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
     Module._extensions[extension] = load.bind(null, options.pre);
   }
 
-  var result = _require.call(this, nameToLoad);
+  var parent = options.hasOwnProperty('parent') ? options.parent : this;
+  if (parent && !parent.paths) {
+    la(check.object(parent), 'expected a parent object', parent);
+    parent.paths = this.paths;
+  }
+  var result = Module._load(nameToLoad, parent);
   log('_require result', result);
 
   if (check.fn(options.pre)) {

@@ -1,7 +1,7 @@
 {
   "name": "really-need",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/really-need/issues"

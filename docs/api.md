@@ -1,10 +1,10 @@
 ## API
 
-The `require` function provided by `really-need` takes a second argument: an options object. 
+The `require` function provided by `really-need` takes a second argument: an options object.
 
 ### bust
 
-Removes the previously cached module before loading. 
+Removes the previously cached module before loading.
 Equivalent to loading and compiling the JavaScript again.
 Alias *bustCache*, default `false`.
 
@@ -24,7 +24,7 @@ read [Hooking into Node loader for fun and profit][hooking].
 module.exports = function() { return 'foo'; };
 // index.js
 require = require('really-need');
-require('./foo', { 
+require('./foo', {
     pre: function (source, filename) {
         return 'console.log("loading ' + filename + '");\n' + source;
     }
@@ -45,12 +45,33 @@ another one on the fly.
 module.exports = function() { return 'foo'; };
 // index.js
 require = require('really-need');
-var foo = require('./foo', { 
+var foo = require('./foo', {
     post: function (exported, filename) {
         return function () { return 'bar'; }
     }
 });
 console.log(foo()); // "bar"
+```
+
+### parent
+
+You can set the parent module to be `undefined` or a mock object. For example, to load
+a module, but make it think it has no parent
+
+```js
+require('./foo', {
+  parent: undefined
+});
+```
+
+You can use an object (not a plain string though) as a parent too
+
+```js
+require('./foo', {
+  parent: {
+    filename: 'ha/ha/mock.js'
+  }
+});
 ```
 
 ### args
