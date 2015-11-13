@@ -84,8 +84,8 @@
     "test-post": "node test/post-test.js",
     "test-pre": "node test/pre-test.js",
     "test-random": "node test/new-random-every-time.js",
+    "test-server": "mocha test/mocked-server/run.js",
     "test-simple": "node test/simple.js",
-    "test-spy": "node test/spy-on-module/spy-on-foo.js",
-    "test-server": "mocha test/mocked-server/run.js"
+    "test-spy": "node test/spy-on-module/spy-on-foo.js"
   }
 }
