@@ -9,6 +9,7 @@ var Module = require('module');
 var runInNewContext = require('vm').runInNewContext;
 var runInThisContext = require('vm').runInThisContext;
 var path = require('path');
+var shebangRe = /^\#\!.*/;
 
 var _require = Module.prototype.require;
 la(check.fn(_require), 'cannot find module require');
@@ -141,7 +142,14 @@ if (patchOptions.printWrappedCode) {
 // console.log('patched compile code');
 // console.log(_compileStr);
 /* jshint -W061 */
-var patchedCompile = eval('(' + _compileStr + ')');
+var patchedCompile;
+try {
+  patchedCompile = eval('(' + _compileStr + ')');
+} catch (err) {
+  console.error('Problem evaluating the new compile');
+  console.error(err.message);
+  console.error(err.stack);
+}
 
 Module.prototype._compile = function (content, filename) {
   var options = tempOptions[filename] || {};
@@ -153,7 +161,18 @@ Module.prototype._compile = function (content, filename) {
     content = added + content;
   }
 
-  var result = patchedCompile.call(this, content, filename);
+  var result;
+  try {
+    result = patchedCompile.call(this, content, filename);
+  } catch (err) {
+    console.error('patched compile has crashed');
+    console.error(err.message);
+    console.error(err.stack);
+    console.error('the patched compile source');
+    console.error(_compileStr);
+    console.error('died while processing content in', filename);
+    console.error(content);
+  }
 
   if (check.fn(options.post)) {
     log('transforming result' + (options.post.name ? ' ' + options.post.name : ''));
