@@ -14,7 +14,10 @@
         "npm run test-spy",
         "npm version"
       ],
-      "pre-push": [],
+      "pre-push": [
+        "npm run size",
+        "npm run pkgfiles"
+      ],
       "post-commit": [],
       "post-merge": []
     }
@@ -40,6 +43,7 @@
     "jshint-summary": "0.4.0",
     "matchdep": "1.0.0",
     "mocha": "2.3.3",
+    "pkgfiles": "2.3.0",
     "pre-git": "1.3.1",
     "quote": "0.4.0",
     "time-grunt": "1.2.2"
@@ -47,6 +51,9 @@
   "engines": {
     "node": "> 0.10.*"
   },
+  "files": [
+    "index.js"
+  ],
   "homepage": "https://github.com/bahmutov/really-need",
   "keywords": [
     "commonjs",
@@ -81,6 +88,8 @@
     "test-random": "node test/new-random-every-time.js",
     "test-server": "mocha test/mocked-server/run.js",
     "test-simple": "node test/simple.js",
-    "test-spy": "node test/spy-on-module/spy-on-foo.js"
+    "test-spy": "node test/spy-on-module/spy-on-foo.js",
+    "pkgfiles": "pkgfiles",
+    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";"
   }
 }
