@@ -1,4 +1,4 @@
-# really-need v1.7.2
+# really-need
 
 > Node require wrapper with options for cache busting, pre- and post-processing
 
@@ -7,6 +7,8 @@
 [![Build status][really-need-ci-image] ][really-need-ci-url]
 [![dependencies][really-need-dependencies-image] ][really-need-dependencies-url]
 [![devdependencies][really-need-devdependencies-image] ][really-need-devdependencies-url]
+[![semantic-release][semantic-image] ][semantic-url]
+[![manpm](https://img.shields.io/badge/manpm-%E2%9C%93-3399ff.svg)](https://github.com/bahmutov/manpm)
 
 [really-need-icon]: https://nodei.co/npm/really-need.png?downloads=true
 [really-need-url]: https://npmjs.org/package/really-need
@@ -16,6 +18,8 @@
 [really-need-dependencies-url]: https://david-dm.org/bahmutov/really-need
 [really-need-devdependencies-image]: https://david-dm.org/bahmutov/really-need/dev-status.png
 [really-need-devdependencies-url]: https://david-dm.org/bahmutov/really-need#info=devDependencies
+[semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[semantic-url]: https://github.com/semantic-release/semantic-release
 
 
 First call to `require('really-need')` replaced `Module.prototype.require` with a better version.
@@ -147,7 +151,7 @@ Each value will stringified to JSON, functions will be copied as a string.
 Print debug messages while loading. Alias *debug*, default `false`.
 
 
-## Use
+## Use examples
 
 ### Load a different module
 
@@ -176,6 +180,12 @@ console.log('check.bit(1) =', check.bit(1));
 [paranoid]: http://glebbahmutov.com/blog/paranoid-coding/
 [check-types]: https://github.com/philbooth/check-types.js
 [check-more-types]: https://github.com/kensho/check-more-types
+
+You can see this in action when I work around a broken dependency twice removed from
+my code in [manpm](https://github.com/bahmutov/manpm)
+inside the [github url parsing][c].
+
+[c]: https://github.com/bahmutov/manpm/blob/a713009fd068da4c99f354b70936ef5ccd3fe7e2/src/get-readme.js#L10
 
 ### Instrument code on load
 

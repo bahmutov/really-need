@@ -1,7 +1,7 @@
 {
   "name": "really-need",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
-  "version": "1.7.2",
+  "version": "0.0.0-semantic-release",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/really-need/issues"
@@ -25,7 +25,6 @@
   "contributors": [],
   "dependencies": {
     "check-more-types": "2.1.2",
-    "check-types": "1.4.0",
     "lazy-ass": "0.6.0"
   },
   "devDependencies": {
@@ -44,8 +43,9 @@
     "matchdep": "1.0.0",
     "mocha": "2.3.3",
     "pkgfiles": "2.3.0",
-    "pre-git": "1.3.1",
+    "pre-git": "1.4.0",
     "quote": "0.4.0",
+    "semantic-release": "4.3.5",
     "time-grunt": "1.2.2"
   },
   "engines": {
@@ -75,9 +75,12 @@
     "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested && npm run test-no-parent",
     "build": "grunt",
     "cache-tests": "node test/busting-cache.js",
-    "commit": "git-issues && git-cz",
+    "commit": "git-issues && commit-wizard",
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path && npm run test-args",
     "issues": "git-issues",
+    "pkgfiles": "pkgfiles",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";",
     "test": "npm run build && npm run basic-tests && npm run cache-tests && npm run extra-tests",
     "test-args": "node test/load-arguments.js",
     "test-nested": "node test/nested-a.js",
@@ -88,8 +91,6 @@
     "test-random": "node test/new-random-every-time.js",
     "test-server": "mocha test/mocked-server/run.js",
     "test-simple": "node test/simple.js",
-    "test-spy": "node test/spy-on-module/spy-on-foo.js",
-    "pkgfiles": "pkgfiles",
-    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";"
+    "test-spy": "node test/spy-on-module/spy-on-foo.js"
   }
 }

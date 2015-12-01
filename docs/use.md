@@ -1,4 +1,4 @@
-# Use
+# Use examples
 
 ## Load a different module
 
@@ -27,6 +27,12 @@ console.log('check.bit(1) =', check.bit(1));
 [paranoid]: http://glebbahmutov.com/blog/paranoid-coding/
 [check-types]: https://github.com/philbooth/check-types.js
 [check-more-types]: https://github.com/kensho/check-more-types
+
+You can see this in action when I work around a broken dependency twice removed from
+my code in [manpm](https://github.com/bahmutov/manpm)
+inside the [github url parsing][c].
+
+[c]: https://github.com/bahmutov/manpm/blob/a713009fd068da4c99f354b70936ef5ccd3fe7e2/src/get-readme.js#L10
 
 ## Instrument code on load
 
