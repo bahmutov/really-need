@@ -10,13 +10,12 @@
     "pre-git": {
       "commit-msg": "validate-commit-msg",
       "pre-commit": [
+        "npm prune",
         "npm test",
-        "npm run test-spy",
-        "npm version"
+        "npm run test-spy"
       ],
       "pre-push": [
-        "npm run size",
-        "npm run pkgfiles"
+        "npm run size"
       ],
       "post-commit": [],
       "post-merge": []
