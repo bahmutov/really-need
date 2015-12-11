@@ -82,23 +82,35 @@ function loadFakeModule(options, filename) {
   log('loading fake module');
 
   var source = options.fake;
-  la(check.unemptyString(source),
-    'expected fake source', source, 'in', options);
 
-  var transformed = source;
-  if (check.fn(options.pre)) {
-    transformed = options.pre(source, filename);
-    if (!transformed) {
-      transformed = source;
+  if (check.string(source)) {
+    la(check.unemptyString(source),
+      'expected fake source', source, 'in', options);
+
+    var transformed = source;
+    if (check.fn(options.pre)) {
+      transformed = options.pre(source, filename);
+      if (!transformed) {
+        transformed = source;
+      }
     }
+    if (isJson(filename)) {
+      return JSON.parse(transformed);
+    }
+
+    module._compile(transformed, filename);
+    return module.exports;
+  } else {
+    var posted = options.fake;
+    if (check.fn(options.post)) {
+      posted = options.post(posted, filename);
+      if (typeof posted !== 'undefined') {
+        return posted;
+      }
+    }
+    return options.fake;
   }
 
-  if (isJson(filename)) {
-    return JSON.parse(transformed);
-  }
-
-  module._compile(transformed, filename);
-  return module.exports;
 }
 
 function loadRealModule(options, filename, self) {
@@ -138,10 +150,18 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
   la(check.unemptyString(this.filename), 'expected called from module to have filename', this);
 
   var nameToLoad;
-  if (check.unemptyString(options.fake)) {
+  if (check.has(options, 'fake')) {
     nameToLoad = path.resolve(process.cwd(), name);
   } else {
-    nameToLoad = Module._resolveFilename(name, this);
+    try {
+      nameToLoad = Module._resolveFilename(name, this);
+    } catch (err) {
+      nameToLoad = path.resolve(process.cwd(), name);
+      if (!require.cache[nameToLoad]) {
+        throw err;
+      }
+      log('using cached module', nameToLoad);
+    }
   }
   log('full name to load', nameToLoad);
   tempOptions[nameToLoad] = options;
@@ -153,11 +173,18 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
 
   var result;
 
-  if (options.fake) {
+  if (check.has(options, 'fake')) {
     result = loadFakeModule(options, nameToLoad);
     require.cache[nameToLoad] = result;
   } else {
-    result = loadRealModule(options, nameToLoad, this);
+    try {
+      result = loadRealModule(options, nameToLoad, this);
+    } catch (err) {
+      if (!require.cache[nameToLoad]) {
+        throw err;
+      }
+      result = require.cache[nameToLoad];
+    }
   }
 
   if (shouldFreeWhenDone(options)) {

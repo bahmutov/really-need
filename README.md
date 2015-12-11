@@ -36,6 +36,7 @@ var foo = require('./foo', {
     // remove from cache AFTER loading
     keep: false,
     // skip the real or non-existent file and just use fake source
+    // fake can also be a JavaScript value, object or function
     fake: 'fake source goes here',
     pre: function (source, filename) {
         // transform the source before compiling it
@@ -166,6 +167,16 @@ require('./does-not-exist.js', {
   pre: function (source, filename) { /* source is 'module.exports = {foo: 42}' */ },
   post: function (o, filename) { /* o is {foo: 42} */ }
 });
+```
+
+You can even load fake value, without compiling it. The `post` hook still applies if needed
+
+```js
+var loaded = require('./does-not-exist.js', {
+  fake: { foo: 42 },
+  post: function (o, filename) { /* o is {foo: 42} */ }
+})
+// loaded is { foo: 42 }
 ```
 
 #### verbose
@@ -474,6 +485,37 @@ describeIt(__dirname + '/foo.js', 'getFoo()', function (getFn) {
 
 Custom loader with source modification makes it simple to gain access to any desired
 function declaration, functional expression and even most variables.
+
+### Unit test using non-existent files
+
+Imagine a piece of code under test loads a file. You do not want to create a fake file
+for every unit test. You can easily create fake modules before the code runs, letting it
+load cached fake copy.
+
+```js
+// get-version.js
+function getVersion() {
+  var pkg = require(process.cwd() + '/example.json');
+  return pkg.version;
+}
+module.exports = getVersion;
+```
+
+The unit test places the fake module into the require cache
+
+```js
+// get-version-spec.js
+require = require('../..');
+describe('get version', function () {
+  var getVersion = require('./get-version');
+  var loaded = require(process.cwd() + '/example.json', {
+    fake: { version: '1.2.3' }
+  });
+  it('returns 1.2.3', function () {
+    console.assert(getVersion() === '1.2.3');
+  });
+});
+```
 
 
 ### How it works

@@ -12,6 +12,7 @@ var foo = require('./foo', {
     // remove from cache AFTER loading
     keep: false,
     // skip the real or non-existent file and just use fake source
+    // fake can also be a JavaScript value, object or function
     fake: 'fake source goes here',
     pre: function (source, filename) {
         // transform the source before compiling it

@@ -111,6 +111,16 @@ require('./does-not-exist.js', {
 });
 ```
 
+You can even load fake value, without compiling it. The `post` hook still applies if needed
+
+```js
+var loaded = require('./does-not-exist.js', {
+  fake: { foo: 42 },
+  post: function (o, filename) { /* o is {foo: 42} */ }
+})
+// loaded is { foo: 42 }
+```
+
 ### verbose
 
 Print debug messages while loading. Alias *debug*, default `false`.
