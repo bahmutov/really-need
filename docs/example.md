@@ -11,6 +11,8 @@ var foo = require('./foo', {
     bustCache: true,
     // remove from cache AFTER loading
     keep: false,
+    // skip the real or non-existent file and just use fake source
+    fake: 'fake source goes here',
     pre: function (source, filename) {
         // transform the source before compiling it
         return source;
