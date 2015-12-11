@@ -121,6 +121,8 @@ var loaded = require('./does-not-exist.js', {
 // loaded is { foo: 42 }
 ```
 
+See [Unit test using non-existent files](#unit-test-using-non-existent-files).
+
 ### verbose
 
 Print debug messages while loading. Alias *debug*, default `false`.
