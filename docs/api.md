@@ -91,6 +91,26 @@ require('./foo', {
 
 Each value will stringified to JSON, functions will be copied as a string.
 
+### fake
+
+You can load non-existing modules from JSON or JavaScript code. Both `pre` and `post` apply.
+
+```js
+require('./does-not-exist.json', {
+  fake: '{ "foo": 42 }',
+  pre: function (source, filename) { /* source is '{"foo": 42}' */ },
+  post: function (o, filename) { /* o is {foo: 42} */ }
+});
+```
+
+```js
+require('./does-not-exist.js', {
+  fake: 'module.exports = { foo: 42 }',
+  pre: function (source, filename) { /* source is 'module.exports = {foo: 42}' */ },
+  post: function (o, filename) { /* o is {foo: 42} */ }
+});
+```
+
 ### verbose
 
 Print debug messages while loading. Alias *debug*, default `false`.

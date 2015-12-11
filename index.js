@@ -23,6 +23,10 @@ var patchOptions = {
 // options by filename
 var tempOptions = {};
 
+function isJson(filename) {
+  return /\.json$/.test(filename);
+}
+
 function shouldBustCache(options) {
   la(check.object(options), 'missing options object', options);
 
@@ -64,12 +68,63 @@ function load(transform, module, filename) {
   var fs = require('fs');
   var source = fs.readFileSync(filename, 'utf8');
   var transformed = transform(source, filename);
+
   if (check.string(transformed)) {
     module._compile(transformed, filename);
   } else {
     console.error('transforming source from', filename, 'has not returned a string');
     module._compile(source, filename);
   }
+}
+
+function loadFakeModule(options, filename) {
+  var log = logger(options);
+  log('loading fake module');
+
+  var source = options.fake;
+  la(check.unemptyString(source),
+    'expected fake source', source, 'in', options);
+
+  var transformed = source;
+  if (check.fn(options.pre)) {
+    transformed = options.pre(source, filename);
+    if (!transformed) {
+      transformed = source;
+    }
+  }
+
+  if (isJson(filename)) {
+    return JSON.parse(transformed);
+  }
+
+  module._compile(transformed, filename);
+  return module.exports;
+}
+
+function loadRealModule(options, filename, self) {
+  var log = logger(options);
+  log('calling _require', filename);
+
+  var extension = '.js';
+  var prevPre = Module._extensions[extension];
+  if (check.fn(options.pre)) {
+    log('using pre- function' + (options.pre.name ? ' ' + options.pre.name : ''));
+    Module._extensions[extension] = load.bind(null, options.pre);
+  }
+
+  var parent = options.hasOwnProperty('parent') ? options.parent : self;
+  if (parent && !parent.paths) {
+    la(check.object(parent), 'expected a parent object', parent);
+    parent.paths = self.paths;
+  }
+
+  var result = Module._load(filename, parent);
+  log('_require result', result);
+
+  if (check.fn(options.pre)) {
+    Module._extensions[extension] = prevPre;
+  }
+  return result;
 }
 
 Module.prototype.require = function reallyNeedRequire(name, options) {
@@ -81,7 +136,14 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
 
   la(check.unemptyString(name), 'expected module name', arguments);
   la(check.unemptyString(this.filename), 'expected called from module to have filename', this);
-  var nameToLoad = Module._resolveFilename(name, this);
+
+  var nameToLoad;
+  if (check.unemptyString(options.fake)) {
+    nameToLoad = path.resolve(process.cwd(), name);
+  } else {
+    nameToLoad = Module._resolveFilename(name, this);
+  }
+  log('full name to load', nameToLoad);
   tempOptions[nameToLoad] = options;
 
   if (shouldBustCache(options)) {
@@ -89,25 +151,13 @@ Module.prototype.require = function reallyNeedRequire(name, options) {
     delete require.cache[nameToLoad];
   }
 
-  log('calling _require', nameToLoad);
+  var result;
 
-  var extension = '.js';
-  var prevPre = Module._extensions[extension];
-  if (check.fn(options.pre)) {
-    log('using pre- function' + (options.pre.name ? ' ' + options.pre.name : ''));
-    Module._extensions[extension] = load.bind(null, options.pre);
-  }
-
-  var parent = options.hasOwnProperty('parent') ? options.parent : this;
-  if (parent && !parent.paths) {
-    la(check.object(parent), 'expected a parent object', parent);
-    parent.paths = this.paths;
-  }
-  var result = Module._load(nameToLoad, parent);
-  log('_require result', result);
-
-  if (check.fn(options.pre)) {
-    Module._extensions[extension] = prevPre;
+  if (options.fake) {
+    result = loadFakeModule(options, nameToLoad);
+    require.cache[nameToLoad] = result;
+  } else {
+    result = loadRealModule(options, nameToLoad, this);
   }
 
   if (shouldFreeWhenDone(options)) {
@@ -163,6 +213,8 @@ Module.prototype._compile = function (content, filename) {
 
   var result;
   try {
+    log('compiling', filename);
+    log(content);
     result = patchedCompile.call(this, content, filename);
   } catch (err) {
     console.error('patched compile has crashed');
@@ -179,7 +231,7 @@ Module.prototype._compile = function (content, filename) {
 
     var transformed = options.post(this.exports, filename);
     if (typeof transformed !== 'undefined') {
-      log('transform function returned undefined, using original result');
+      log('transform function returned something');
       this.exports = transformed;
     }
   }

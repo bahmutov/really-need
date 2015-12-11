@@ -12,6 +12,7 @@
       "pre-commit": [
         "npm prune",
         "npm test",
+        "npm run test-fakes",
         "npm run test-spy"
       ],
       "pre-push": [
@@ -82,6 +83,7 @@
     "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";",
     "test": "npm run build && npm run basic-tests && npm run cache-tests && npm run extra-tests",
     "test-args": "node test/load-arguments.js",
+    "test-fakes": "node test/load-fake-json.js && node test/load-fake.js",
     "test-nested": "node test/nested-a.js",
     "test-no-parent": "node test/no-parent/second.js && node test/no-parent/first.js",
     "test-path": "node test/path-test.js",
