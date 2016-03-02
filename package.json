@@ -96,6 +96,7 @@
     "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";",
     "test": "npm run build && npm run basic-tests && npm run cache-tests && npm run extra-tests",
     "test-args": "node test/load-arguments.js",
+    "test-debug": "node test/debug.js",
     "test-fake-example": "mocha test/fake-use/get-version-spec.js",
     "test-fakes": "node test/load-fake-json.js && node test/load-fake.js && node test/load-fake-object.js && node test/load-fake-example.js",
     "test-nested": "node test/nested-a.js",
