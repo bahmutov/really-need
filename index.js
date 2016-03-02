@@ -220,8 +220,14 @@ if (patchOptions.printWrappedCode) {
 // console.log(_compileStr);
 /* jshint -W061 */
 var patchedCompile;
+var _compileStrExpr = '(' + _compileStr + ')';
+
+if (global.v8debug) {
+  _compileStrExpr = 'var resolvedArgv;\n' + _compileStrExpr;
+}
+
 try {
-  patchedCompile = eval('(' + _compileStr + ')');
+  patchedCompile = eval(_compileStrExpr);
 } catch (err) {
   console.error('Problem evaluating the new compile');
   console.error(err.message);
