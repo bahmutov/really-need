@@ -1,7 +1,7 @@
 {
   "name": "really-need",
   "description": "Node require wrapper with options for cache busting, pre- and post-processing",
-  "version": "0.0.0-semantic-release",
+  "version": "0.0.0",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/really-need/issues"
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@semantic-release/condition-travis": "4.1.4",
     "condition-node-version": "1.2.0",
+    "deps-ok": "1.1.0",
     "eslint-rules": "0.4.3",
     "git-issues": "1.1.0",
     "grunt": "0.4.5",
@@ -92,6 +93,7 @@
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path && npm run test-args",
     "issues": "git-issues",
     "pkgfiles": "pkgfiles",
+    "pretest": "deps-ok",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";",
     "test": "npm run build && npm run basic-tests && npm run cache-tests && npm run extra-tests",
