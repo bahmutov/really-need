@@ -1,0 +1,9 @@
+FROM mhart/alpine-node:$VERSION
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY package.json .
+# Adding extra tools
+# https://github.com/mhart/alpine-node/issues/22
+RUN apk add --update git
+RUN npm install
+COPY . .

@@ -90,7 +90,7 @@
     "basic-tests": "npm run test-simple && npm run test-random && npm run test-nested && npm run test-no-parent",
     "build": "grunt",
     "cache-tests": "node test/busting-cache.js",
-    "check": "autochecker 0.12 4.2.6 4.3.0 4.4.2 5.1.1 5.5.0 5.10.0",
+    "check": "autochecker 0.12",
     "commit": "git-issues && commit-wizard",
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path && npm run test-args",
     "issues": "git-issues",
