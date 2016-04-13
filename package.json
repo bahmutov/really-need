@@ -91,7 +91,7 @@
     "build": "grunt",
     "cache-tests": "node test/busting-cache.js",
     "check": "autochecker 0.12",
-    "check-all": "autochecker 0.12 4.2 4.3 4.4 5.1 5.2 5.5 5.9 5.10",
+    "check-all": "autochecker 0.12 5.1",
     "commit": "git-issues && commit-wizard",
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path && npm run test-args",
     "issues": "git-issues",
