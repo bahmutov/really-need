@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@semantic-release/condition-travis": "4.1.4",
-    "autochecker": "0.1.0",
+    "autochecker": "0.2.0",
     "condition-node-version": "1.2.0",
     "deps-ok": "1.1.0",
     "eslint-rules": "0.4.3",
@@ -91,6 +91,7 @@
     "build": "grunt",
     "cache-tests": "node test/busting-cache.js",
     "check": "autochecker 0.12",
+    "check-all": "autochecker 0.12 4 5",
     "commit": "git-issues && commit-wizard",
     "extra-tests": "npm run test-pre && npm run test-post && npm run test-path && npm run test-args",
     "issues": "git-issues",
